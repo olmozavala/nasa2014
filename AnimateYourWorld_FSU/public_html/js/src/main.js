@@ -16,7 +16,7 @@ goog.require('ol.format.WMSCapabilities');
 
 var nasa_layers = new Array();
 var ol3_layers = new Array();
-var currentLayer = 0;
+var currentLayer = 46;
 var map_main;
 
 function runApp(){
@@ -24,28 +24,17 @@ function runApp(){
 	var o_map_northpole= $("#northpoleMap");
 	var o_map_antarctica = $("#antarcticaMap");
 
-	manageBaseLayers();
-	
 	initNasaLayers();
-	resizeMaps();
+
+	initGui();
 }
 
-function resizeMaps(){
-	var vpw = $(window).width();
-	var vph = $(window).height();
-	
-	//	$("#mainMap").css({'width':vpw+'px'});
-	var mapHeight = Math.ceil(vph/2); 
-	$("#mainMap").css({'height':mapHeight+'px'});
-	
-	var o_map_northpole= $("#northpoleMap");
-	var o_map_antarctica = $("#antarcticaMap");
-}
+
 
 function initMaps(){
 	var view_main = new ol.View2D({
 		projection: 'EPSG:4326',
-		center: [0,0],
+		center: [87,25],
 		zoom: 1
 	});
 	var view_northpole = new ol.View2D({
@@ -139,7 +128,11 @@ function initNasaLayers(){
 		var select = $("#baseLayers");
 		for(var i=0;i<nasa_layers.length;i++){
 			nasa_layers[i].wmts = url;
-			select.append($('<option>',{value:i, text:nasa_layers[i].name}));
+			option = new Option(nasa_layers[i].name, i)
+			if(i == currentLayer){
+				option.selected = true;
+			}
+			select.append(option);
 		}
 		
 		initMaps();
