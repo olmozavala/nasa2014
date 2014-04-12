@@ -14,7 +14,7 @@ goog.require('ol.format.WMSCapabilities');
  */
 
 var nasa_layers = new Array();
-var ol3_layers = new Array();
+var ol3_layers = new Array(81);
 var currentLayer = 46;
 var map_main;
 var main_view;
@@ -25,9 +25,9 @@ function runApp(){
 	var o_map_main = $("#mainMap");
 	var o_map_northpole= $("#northpoleMap");
 	var o_map_antarctica = $("#antarcticaMap");
-
+	
 	initNasaLayers();
-
+	
 	initGui();
 }
 
@@ -61,41 +61,41 @@ function initMaps(){
 				"</a>" 
 	});
 	
+
 	
 	for(var i=0;i<nasa_layers.length;i++){
 		var zoomLevels = nasa_layers[i].zoom;
 		var maxResolution = nasa_layers[i].maxRes;
+		
 		var resolutions = new Array(zoomLevels);
 		var matrixIds = new Array(zoomLevels);
+		
 		for (var z = 0; z < zoomLevels; ++z) {
 			// generate resolutions and matrixIds arrays for this WMTS
 			resolutions[z] = maxResolution/ Math.pow(2, z);
 			matrixIds[z] = z;
 		}
-
-		layerSource = new ol.source.WMTS({
-				attributions: [attribution],
-				url: nasa_layers[i].wmts,
-				layer: nasa_layers[i].name,
-				matrixSet: nasa_layers[i].matrix,
-
-//				layer: "MODIS_Terra_CorrectedReflectance_TrueColor",
-
-				format: nasa_layers[i].format, 
-				projection: projection,
-				tileGrid: new ol.tilegrid.WMTS({
-					origin: ol.extent.getTopLeft(projectionExtent),
-					resolutions: resolutions,
-					matrixIds: matrixIds,
-					tileSize: 512
-				}),
-//				extent: nasa_layers[i].extent,
-				extent: projectionExtent,
-				style: ''
-			});
-			
-	
-		ol3_layers[i] = new ol.layer.Tile({ source: layerSource });
+		
+		var tempSource = new ol.source.WMTS({
+			attributions: [attribution],
+			url: nasa_layers[i].wmts,
+			layer: nasa_layers[i].name,
+			matrixSet: nasa_layers[i].matrix,
+			format: nasa_layers[i].format, 
+			projection: projection,
+			tileGrid: new ol.tilegrid.WMTS({
+				origin: ol.extent.getTopLeft(projectionExtent),
+				resolutions: resolutions,
+				matrixIds: matrixIds,
+				tileSize: 512
+			}),
+			//				extent: nasa_layers[i].extent,
+			extent: projectionExtent,
+			style: ''
+		});
+		
+		
+		ol3_layers[i] = new ol.layer.Tile({ source: tempSource});
 	}// loop
 	
 	initMap('mainMap',main_view,[ol3_layers[currentLayer]]);
@@ -114,27 +114,13 @@ function initMap(id, view,layers){
         view: view});
 }
 
-function obtainZoomLevels(matrixSet){
-	switch(matrixSet){
-		case "EPSG4326_250m":
-			return 9;
-		case "EPSG4326_500m":
-			return 8;
-		case "EPSG4326_1km":
-			return 7;
-		case "EPSG4326_2km":
-			return 6;
-	}
-	return 9; // by default
-}
 
 function initNasaLayers(){
-	var parser = new ol.format.WMSCapabilities();
 	
 	$.ajax('http://map1.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi?SERVICE=WMTS&request=GetCapabilities').then(function(response) {
 		var url = $($(response).find('[name=GetTile] HTTP').children()[1]).attr("xlink:href");
 		
-		var allLayers = $(response).find('Layer').each(function (idx,layer){
+		$(response).find('Layer').each(function (idx,layer){
 			var name = $(layer).find('Title').text();
 			
 			//TODO I do not know if this will always work (removing 'default')
@@ -143,20 +129,17 @@ function initNasaLayers(){
 			var matrixSet = $.trim($(layer).find('TileMatrixSetLink').text());
 			var zoomLevels = obtainZoomLevels(matrixSet);
 			var format = $.trim($(layer).find('Format').text());
-
+			
 			var extent =  [$(layer).find('LowerCorner').text(), $(layer).find('UpperCorner').text()];
-			nasa_layers[idx] = new NasaLayer(name,extent,"",matrixSet,0.5625,"",zoomLevels,format);
+			
+			var times = $($(layer).find('Dimension')).find('Value').text().split('/');
+			
+			//All layers have the same max resolution
+			nasa_layers[idx] = new NasaLayer(name,extent,"",matrixSet,0.5625,"",zoomLevels,format,times[0],times[1]);
+			
 		});
 		
-		var select = $("#baseLayers");
-		for(var i=0;i<nasa_layers.length;i++){
-			nasa_layers[i].wmts = url;
-			option = new Option(nasa_layers[i].name, i)
-			if(i === currentLayer){
-				option.selected = true;
-			}
-			select.append(option);
-		}
+		fillDropdown(nasa_layers,currentLayer,url);
 		
 		initMaps();
 	});

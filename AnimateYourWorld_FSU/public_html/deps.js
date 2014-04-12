@@ -22,7 +22,6 @@ goog.addDependency('libtess.js/render/FaceCount.js', ['libtess.FaceCount'], ['li
 goog.addDependency('libtess.js/sweep.js', ['libtess.sweep'], ['libtess', 'libtess.ActiveRegion', 'libtess.Dict', 'libtess.GluVertex', 'libtess.PriorityQ', 'libtess.geom', 'libtess.mesh']);
 goog.addDependency('libtess.js/sweep/ActiveRegion.js', ['libtess.ActiveRegion'], ['libtess.DictNode']);
 goog.addDependency('libtess.js/tessmono.js', ['libtess.tessmono'], ['libtess', 'libtess.geom', 'libtess.mesh']);
-goog.addDependency('main.js', ['animate'], ['ol.Map', 'ol.View2D', 'ol.extent', 'ol.format.WMSCapabilities', 'ol.layer.Tile', 'ol.proj', 'ol.source.MapQuest', 'ol.source.OSM', 'ol.source.WMTS', 'ol.tilegrid.WMTS']);
 goog.addDependency('ol/animation.js', ['ol.animation'], ['ol.PreRenderFunction', 'ol.ViewHint', 'ol.coordinate', 'ol.easing']);
 goog.addDependency('ol/array.js', ['ol.array'], ['goog.array', 'goog.asserts']);
 goog.addDependency('ol/attribution.js', ['ol.Attribution'], ['ol.TileRange']);

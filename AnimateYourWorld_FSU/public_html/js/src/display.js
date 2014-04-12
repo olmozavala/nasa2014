@@ -9,8 +9,6 @@ function initGui(){
 	initDatePickers();
 
 	resizeMaps();
-
-
 }
 
 function resizeMaps(){
@@ -32,13 +30,12 @@ function initDatePickers(){
 	$("#datepicker").datepicker("option","dateFormat", 'yy-mm-dd');
 	$("#datepicker").val($.datepicker.formatDate('yy-mm-dd', new Date()));
 	$("#datepicker").change(updateLayerDate);
-
 	
 	$( "#from" ).datepicker({
 		dateFormat: 'yy-mm-dd',
 		defaultDate: "-1w",
 		changeMonth: true,
-		numberOfMonths: 3,
+		numberOfMonths: 1,
 		onClose: function( selectedDate ) {
 			$( "#to" ).datepicker( "option", "minDate", selectedDate );
 		}
@@ -47,10 +44,13 @@ function initDatePickers(){
 		dateFormat: 'yy-mm-dd',
 		defaultDate: "-1w",
 		changeMonth: true,
-		numberOfMonths: 3,
+		numberOfMonths: 1,
 		onClose: function( selectedDate ) {
 			$( "#from" ).datepicker( "option", "maxDate", selectedDate );
 		}
     });
 }
 
+function updateAvailableTimes(){
+
+}
