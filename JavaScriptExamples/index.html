@@ -8,6 +8,7 @@ and open the template in the editor.
 		<title></title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		
+        <script src="js/external.js"></script>
 		<script>
 			//Objects are simple functions
 			function myCatConst(name,lastname){
@@ -25,6 +26,9 @@ and open the template in the editor.
 				//Obtaining paragraphs from the html page by id
 				var texts = document.getElementById("texts");
 				var texts2 = document.getElementById("texts2");
+
+                //Calling a function from an external file
+                myExtFunction();
 
 				//arrays
 				var myArray = ['sopas', 'perico', 'lico'];
