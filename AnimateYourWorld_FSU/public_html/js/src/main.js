@@ -61,8 +61,6 @@ function initMaps(){
 				"</a>" 
 	});
 	
-
-	
 	for(var i=0;i<nasa_layers.length;i++){
 		var zoomLevels = nasa_layers[i].zoom;
 		var maxResolution = nasa_layers[i].maxRes;

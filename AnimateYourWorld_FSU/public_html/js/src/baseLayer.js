@@ -46,10 +46,29 @@ function updateLayerDate(){
 	
 }
 
+
+var lastUpdateOfUrls = new Date();
+/**
+ * This function is used to save the current 'tiles' that the user is 'viewing' 
+ * @param {type} url
+ * @returns {undefined}
+ */
 function saveCurrentRequests(url){
+	var currentUpdate = new Date();
+	//TODO this is a patch, if the tiles get updated after
+	// two second, then we assume they are from a different view 
+	var threshold = 1000; 
+	if( (currentUpdate - lastUpdateOfUrls ) > threshold){
+		console.log((currentUpdate - lastUpdateOfUrls ));
+		lastUpdateOfUrls = currentUpdate;
+
+		console.log(current_requests.length);
+		current_requests = new Array();
+	}
+	lastUpdateOfUrls = currentUpdate;
+
 	var size = current_requests.length;
 	current_requests[size] = url;
-	//	console.log(url);
 }
 
 function fillDropdown(nasa_layers,currentLayer,url){
