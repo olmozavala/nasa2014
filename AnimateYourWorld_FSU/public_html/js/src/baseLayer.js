@@ -19,7 +19,7 @@ function updateBaseLayer(){
 	var newDate = $("#datepicker").val();
 	var mainLayer = ol3_layers[currentLayer];
 
-    layerParams= mainLayer.getSource().getParams();
+    layer_sorce = mainLayer.getSource();
 
     layerParams.time = newDate;//Modify the desired parameter
 	

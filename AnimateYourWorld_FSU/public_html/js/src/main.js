@@ -72,8 +72,7 @@ function initMaps(){
 	
 	
 	for(var i=0;i<nasa_layers.length;i++){
-		ol3_layers[i] = new ol.layer.Tile({
-			source: new ol.source.WMTS({
+		layerSource = new ol.source.WMTS({
 				attributions: [attribution],
 				url: nasa_layers[i].wmts,
 				layer: nasa_layers[i].name,
@@ -92,14 +91,21 @@ function initMaps(){
 //				extent: nasa_layers[i].extent,
 				extent: projectionExtent,
 				style: ''
-			})
-		});
+			});
+			
+		var superTileUrlFunction = layerSource.tileUrlFunction;
+		layerSource.tileUrlFunction = function() {
+			var url = superTileUrlFunction.apply(layerSource, arguments);
+			if ( url ) { return url + "&TIME=2013-06-15"; }
+		};
+		
+		ol3_layers[i] = new ol.layer.Tile({ source: layerSource });
 	}// loop
 	
 	initMap('mainMap',view_main,[ol3_layers[currentLayer]]);
 	//	initMap('northpoleMap',view_northpole,[def_layer]);
 	//	initMap('antarcticaMap',view_antarctica,[def_layer]);
-
+	
 }//initMaps()
 
 function initMap(id, view,layers){
