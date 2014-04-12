@@ -29,24 +29,31 @@
 -->
     
     <script type="text/javascript" src="../Pixastic/pixastic.core.js"></script>
-    <script type="text/javascript" src="../Pixastic/actions/edges.js"></script>
+    <script type="text/javascript" src="../Pixastic/actions/colorhistogram.js"></script>
     <script type="text/javascript" src="../Pixastic/actions/desaturate.js"></script>
-    
+    <script type="text/javascript" src="../Pixastic/actions/edges.js"></script>
+
     
   </head>
   <body>
     <h2>original</h2>
-    <img src="http://map1.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi?Layer=MODIS_Terra_CorrectedReflectance_TrueColor&style&Style&TileMatrixSet=EPSG4326_250m&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2Fjpeg&TileMatrix=2&TileCol=4&TileRow=1" id="img" crossorigin="anonymus">
+    <img src="http://map1.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi?Layer=MODIS_Terra_CorrectedReflectance_TrueColor&style&Style&TileMatrixSet=EPSG4326_250m&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2Fjpeg&TileMatrix=5&TileCol=36&TileRow=7" id="img" crossorigin="anonymus">
     
     <script>
+      var hist = {};
       var imgSrc= document.getElementById("img").src
       var img = new Image();	
       var title = document.createElement('h2');
-      title.innerHTML="edges";
+      title.innerHTML="Processed image";
       img.src=imgSrc;
-      Pixastic.process(img, "edges");
+      Pixastic.process(img, "colorhistogram",{paint:true,returnValue:hist});
       document.body.appendChild(title);	
       document.body.appendChild(img);	
+      console.log(hist.rvals);
+      hist.gvals; 
+      hist.bvals; 
+      console.log("Rvals");
+      console.log(hist.rvals[10]);		    
     </script>
        
   </body>
