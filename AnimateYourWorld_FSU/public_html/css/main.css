@@ -1,6 +1,5 @@
 /* line 2, ../scss/main.scss */
 #mainMap {
-  height: 50%;
 }
 
 /* line 6, ../scss/main.scss */
@@ -11,4 +10,8 @@ p {
 /* line 10, ../scss/main.scss */
 .btn-default, p {
   margin-top: 1em;
+}
+
+h2,h3 {
+	text-align: center;
 }
