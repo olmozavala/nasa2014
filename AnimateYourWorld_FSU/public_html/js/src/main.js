@@ -50,7 +50,6 @@ function initMaps(){
 	
 	var projection = ol.proj.get('EPSG:4326');
 	var projectionExtent = projection.getExtent();
-	var maxResolution = 0.5625;
 	
 	var attribution = new ol.Attribution({
 		html: "<a href='http://openlayers.org'>" +
@@ -65,6 +64,7 @@ function initMaps(){
 	
 	for(var i=0;i<nasa_layers.length;i++){
 		var zoomLevels = nasa_layers[i].zoom;
+		var maxResolution = nasa_layers[i].maxRes;
 		var resolutions = new Array(zoomLevels);
 		var matrixIds = new Array(zoomLevels);
 		for (var z = 0; z < zoomLevels; ++z) {
@@ -145,7 +145,7 @@ function initNasaLayers(){
 			var format = $.trim($(layer).find('Format').text());
 
 			var extent =  [$(layer).find('LowerCorner').text(), $(layer).find('UpperCorner').text()];
-			nasa_layers[idx] = new NasaLayer(name,extent,"",matrixSet,"","",zoomLevels,format);
+			nasa_layers[idx] = new NasaLayer(name,extent,"",matrixSet,0.5625,"",zoomLevels,format);
 		});
 		
 		var select = $("#baseLayers");

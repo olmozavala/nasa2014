@@ -20,25 +20,29 @@ function updateBaseLayer(new_idx){
 
 function updateLayerDate(){
 	var newDate = $("#datepicker").val();
-	var mainLayer = ol3_layers[currentLayer];
+
+	for(var i=0;i<ol3_layers.length;i++){
+		var layer = ol3_layers[i];
 	
-    var layerSource = mainLayer.getSource();
+		var layerSource = layer.getSource();
 	
-	var superTileUrlFunction = layerSource.tileUrlFunction;
-	layerSource.tileUrlFunction = function() {
-		var url = superTileUrlFunction.apply(layerSource, arguments);
-		//Checks if the url already has a TIME parameter
-		if(url){
-			if(url.indexOf('TIME') !== -1){
-				//Remove old time
-				url = url.substring(0, url.length - 15);
+		var superTileUrlFunction = layerSource.tileUrlFunction;
+
+		layerSource.tileUrlFunction = function() {
+			var url = superTileUrlFunction.apply(layerSource, arguments);
+			//Checks if the url already has a TIME parameter
+			if(url){
+				if(url.indexOf('TIME') !== -1){
+					//Remove old time
+					url = url.substring(0, url.length - 15);
+				}
+				url += "&TIME="+newDate; 
+				saveCurrentRequests(url);
+				return url; 
 			}
-			url += "&TIME="+newDate; 
-			saveCurrentRequests(url);
-			return url; 
-		}
-		
-	};
+			
+		};
+	}
 
 }
 
