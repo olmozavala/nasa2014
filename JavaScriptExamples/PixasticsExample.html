@@ -39,6 +39,7 @@
     <h2>original</h2>
     <img src="http://map1.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi?Layer=MODIS_Terra_CorrectedReflectance_TrueColor&style&Style&TileMatrixSet=EPSG4326_250m&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2Fjpeg&TileMatrix=5&TileCol=36&TileRow=7" id="img" crossorigin="anonymus">
     
+    <button text="venga" value="venga" onclick="venga()">Aqui!!</button>
     <script>
       var hist = {};
       var imgSrc= document.getElementById("img").src
@@ -49,11 +50,13 @@
       Pixastic.process(img, "colorhistogram",{paint:true,returnValue:hist});
       document.body.appendChild(title);	
       document.body.appendChild(img);	
-      console.log(hist.rvals);
-      hist.gvals; 
-      hist.bvals; 
-      console.log("Rvals");
-      console.log(hist.rvals[10]);		    
+      function venga(){
+          console.log(hist.rvals);
+          hist.gvals; 
+          hist.bvals; 
+          console.log("Rvals");
+          console.log(hist.rvals[10]);		    
+      }
     </script>
        
   </body>
