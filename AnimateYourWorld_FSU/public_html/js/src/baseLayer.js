@@ -32,13 +32,18 @@ function updateLayerDate(){
 			if(url.indexOf('TIME') !== -1){
 				//Remove old time
 				url = url.substring(0, url.length - 15);
-				return url + "&TIME="+newDate; 
-			}else{
-				return url + "&TIME="+newDate; 
 			}
+			url += "&TIME="+newDate; 
+			saveCurrentRequests(url);
+			return url; 
 		}
 		
 	};
 
-	map_main.render();
+}
+
+function saveCurrentRequests(url){
+	var size = current_requests.length;
+	current_requests[size] = url;
+	console.log(url);
 }

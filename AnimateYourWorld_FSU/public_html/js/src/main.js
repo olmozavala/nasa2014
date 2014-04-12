@@ -13,11 +13,13 @@ goog.require('ol.tilegrid.WMTS');
 goog.require('ol.format.WMSCapabilities');
  */
 
-
 var nasa_layers = new Array();
 var ol3_layers = new Array();
 var currentLayer = 46;
 var map_main;
+var main_view;
+
+var current_requests = new Array();
 
 function runApp(){
 	var o_map_main = $("#mainMap");
@@ -29,10 +31,8 @@ function runApp(){
 	initGui();
 }
 
-
-
 function initMaps(){
-	var view_main = new ol.View2D({
+	main_view = new ol.View2D({
 		projection: 'EPSG:4326',
 		center: [87,25],
 		zoom: 1
@@ -51,14 +51,6 @@ function initMaps(){
 	var projection = ol.proj.get('EPSG:4326');
 	var projectionExtent = projection.getExtent();
 	var maxResolution = 0.5625;
-	var size = 20;
-	var resolutions = new Array(size);
-	var matrixIds = new Array(size);
-	for (var z = 0; z < size; ++z) {
-		// generate resolutions and matrixIds arrays for this WMTS
-		resolutions[z] = maxResolution/ Math.pow(2, z);
-		matrixIds[z] = z;
-	}
 	
 	var attribution = new ol.Attribution({
 		html: "<a href='http://openlayers.org'>" +
@@ -72,6 +64,15 @@ function initMaps(){
 	
 	
 	for(var i=0;i<nasa_layers.length;i++){
+		var zoomLevels = nasa_layers[i].zoom;
+		var resolutions = new Array(zoomLevels);
+		var matrixIds = new Array(zoomLevels);
+		for (var z = 0; z < zoomLevels; ++z) {
+			// generate resolutions and matrixIds arrays for this WMTS
+			resolutions[z] = maxResolution/ Math.pow(2, z);
+			matrixIds[z] = z;
+		}
+
 		layerSource = new ol.source.WMTS({
 				attributions: [attribution],
 				url: nasa_layers[i].wmts,
@@ -80,7 +81,7 @@ function initMaps(){
 
 //				layer: "MODIS_Terra_CorrectedReflectance_TrueColor",
 
-				formAt: 'image/jpg',
+				format: nasa_layers[i].format, 
 				projection: projection,
 				tileGrid: new ol.tilegrid.WMTS({
 					origin: ol.extent.getTopLeft(projectionExtent),
@@ -97,10 +98,13 @@ function initMaps(){
 		ol3_layers[i] = new ol.layer.Tile({ source: layerSource });
 	}// loop
 	
-	initMap('mainMap',view_main,[ol3_layers[currentLayer]]);
+	initMap('mainMap',main_view,[ol3_layers[currentLayer]]);
 	//	initMap('northpoleMap',view_northpole,[def_layer]);
 	//	initMap('antarcticaMap',view_antarctica,[def_layer]);
 	
+	// Run once the updateLayerDate function in order
+	// to add the TIME parameter into the main layer
+	updateLayerDate();
 }//initMaps()
 
 function initMap(id, view,layers){
@@ -108,6 +112,20 @@ function initMap(id, view,layers){
         target: id,
         layers: layers,
         view: view});
+}
+
+function obtainZoomLevels(matrixSet){
+	switch(matrixSet){
+		case "EPSG4326_250m":
+			return 9;
+		case "EPSG4326_500m":
+			return 8;
+		case "EPSG4326_1km":
+			return 7;
+		case "EPSG4326_2km":
+			return 6;
+	}
+	return 9; // by default
 }
 
 function initNasaLayers(){
@@ -118,24 +136,28 @@ function initNasaLayers(){
 		
 		var allLayers = $(response).find('Layer').each(function (idx,layer){
 			var name = $(layer).find('Title').text();
+			
 			//TODO I do not know if this will always work (removing 'default')
 			name = name.replace('default','');
+			
 			var matrixSet = $.trim($(layer).find('TileMatrixSetLink').text());
+			var zoomLevels = obtainZoomLevels(matrixSet);
+			var format = $.trim($(layer).find('Format').text());
+
 			var extent =  [$(layer).find('LowerCorner').text(), $(layer).find('UpperCorner').text()];
-			nasa_layers[idx] = new NasaLayer(name,extent,"",matrixSet,"","");
+			nasa_layers[idx] = new NasaLayer(name,extent,"",matrixSet,"","",zoomLevels,format);
 		});
 		
 		var select = $("#baseLayers");
 		for(var i=0;i<nasa_layers.length;i++){
 			nasa_layers[i].wmts = url;
 			option = new Option(nasa_layers[i].name, i)
-			if(i == currentLayer){
+			if(i === currentLayer){
 				option.selected = true;
 			}
 			select.append(option);
 		}
 		
 		initMaps();
-		
 	});
 }
