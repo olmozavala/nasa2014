@@ -93,12 +93,7 @@ function initMaps(){
 				style: ''
 			});
 			
-		var superTileUrlFunction = layerSource.tileUrlFunction;
-		layerSource.tileUrlFunction = function() {
-			var url = superTileUrlFunction.apply(layerSource, arguments);
-			if ( url ) { return url + "&TIME=2013-06-15"; }
-		};
-		
+	
 		ol3_layers[i] = new ol.layer.Tile({ source: layerSource });
 	}// loop
 	

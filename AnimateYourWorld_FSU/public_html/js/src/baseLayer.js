@@ -8,22 +8,37 @@
 function initBaseLayers(){
 	$("#baseLayers").change(function() {
 		var new_idx = parseInt($("select option:selected").val());
-		map_main.removeLayer(ol3_layers[currentLayer]);
-		map_main.addLayer(ol3_layers[new_idx]);
-		currentLayer = new_idx;
+		updateBaseLayer(new_idx);
 	});
 }
 
+function updateBaseLayer(new_idx){
+	map_main.removeLayer(ol3_layers[currentLayer]);
+	map_main.addLayer(ol3_layers[new_idx]);
+	currentLayer = new_idx;
+}
 
-function updateBaseLayer(){
+function updateLayerDate(){
 	var newDate = $("#datepicker").val();
 	var mainLayer = ol3_layers[currentLayer];
-
-    layer_sorce = mainLayer.getSource();
-
-    layerParams.time = newDate;//Modify the desired parameter
 	
-    mainLayer.getSource().updateParams(layerParams);//Updates the layer
+    var layerSource = mainLayer.getSource();
+	
+	var superTileUrlFunction = layerSource.tileUrlFunction;
+	layerSource.tileUrlFunction = function() {
+		var url = superTileUrlFunction.apply(layerSource, arguments);
+		//Checks if the url already has a TIME parameter
+		if(url){
+			if(url.indexOf('TIME') !== -1){
+				//Remove old time
+				url = url.substring(0, url.length - 15);
+				return url + "&TIME="+newDate; 
+			}else{
+				return url + "&TIME="+newDate; 
+			}
+		}
+		
+	};
 
-	console.log("end");
+	map_main.render();
 }

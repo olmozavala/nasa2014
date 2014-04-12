@@ -28,7 +28,7 @@ function initDatePickers(){
 
 	$("#datepicker").datepicker();
 	$("#datepicker").datepicker("option","dateFormat", 'yy-mm-dd');
-	$("#datepicker").change(updateBaseLayer);
+	$("#datepicker").change(updateLayerDate);
 	$("#datepicker").val("Today");
 
 	$( "#from" ).datepicker({
