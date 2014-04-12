@@ -19,19 +19,17 @@
 	<link rel="stylesheet" href="css/main.css">
 	
 	<script src="http://ol3js.org/en/master/build/ol.js" type="text/javascript"></script>
+	<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.0.js"><\/script>')</script>
+	<script src="js/src/model/layer.js" type="text/javascript"></script>
+	<script src="js/src/baseLayer.js" type="text/javascript"></script>
 </head>
-<body>
+<body onload="runApp()">
 	<form role="form">
 		<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 			<div class="container">
 				<div class="navbar-header">
 					<a class="navbar-brand" href="#">Animate your world by Tally</a>
-					<!--<div class="form-group">-->
-					<!--<select class="form-control">-->
-					<!--<option>Base layer 1</option>-->
-					<!--</select>-->
-					<!--</div>-->
-				</div>
+									</div>
 			</div>
 		</div>
 		
@@ -39,6 +37,11 @@
 			<div class="row">
 				<div class="col-xs-3">
 					<h2>Controls</h2>
+					<div class="form-group">
+					<select id="baseLayers" class="form-control">
+					</select>
+					</div>
+
 					<p><a class="btn btn-default" href="#" role="button">Make animation</a></p>
 				</div>
 				<div class="col-xs-9">
@@ -67,7 +70,6 @@
 			</div>
 		</div> <!-- /container -->        
 		<!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.js"></script>-->
-		<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.0.js"><\/script>')</script>
 		
 		<script src="js/vendor/bootstrap.min.js"></script>
 		

@@ -11,19 +11,22 @@ goog.require('ol.source.MapQuest');
 goog.require('ol.source.WMTS');
 goog.require('ol.tilegrid.WMTS');
 goog.require('ol.format.WMSCapabilities');
-*/
+ */
 
-$(document).ready(initMaps);
 
-var nasa_layers;
+var nasa_layers = new Array();
+var ol3_layers = new Array();
+var currentLayer = 0;
+var map_main;
 
-function initMaps(){
+function runApp(){
 	var o_map_main = $("#mainMap");
 	var o_map_northpole= $("#northpoleMap");
 	var o_map_antarctica = $("#antarcticaMap");
+
+	manageBaseLayers();
 	
-	
-	initOl3();	
+	initNasaLayers();
 	resizeMaps();
 }
 
@@ -39,7 +42,7 @@ function resizeMaps(){
 	var o_map_antarctica = $("#antarcticaMap");
 }
 
-function initOl3(){
+function initMaps(){
 	var view_main = new ol.View2D({
 		projection: 'EPSG:4326',
 		center: [0,0],
@@ -78,39 +81,40 @@ function initOl3(){
 				"</a>" 
 	});
 	
-	var def_layer = new ol.layer.Tile({
-		opacity: 0.7,
-		source: new ol.source.WMTS({
-			attributions: [attribution],
-			urls: [
-				"https://map1a.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-				"https://map1b.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi",
-				"https://map1c.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi"
-			],
-			layer: "MODIS_Terra_CorrectedReflectance_TrueColor",
-			matrixSet: 'EPSG4326_250m',
-			formAt: 'image/jpg',
-			projection: projection,
-			tileGrid: new ol.tilegrid.WMTS({
-				origin: ol.extent.getTopLeft(projectionExtent),
-				resolutions: resolutions,
-				matrixIds: matrixIds,
-				tileSize: 512
-			}),
-			extent: projectionExtent,
-			style: ''
-		})
-	});
 	
-	initMap('mainMap',view_main,[def_layer]);
-//	initMap('northpoleMap',view_northpole,[def_layer]);
-//	initMap('antarcticaMap',view_antarctica,[def_layer]);
+	for(var i=0;i<nasa_layers.length;i++){
+		ol3_layers[i] = new ol.layer.Tile({
+			source: new ol.source.WMTS({
+				attributions: [attribution],
+				url: nasa_layers[i].wmts,
+				layer: nasa_layers[i].name,
+				matrixSet: nasa_layers[i].matrix,
+
+//				layer: "MODIS_Terra_CorrectedReflectance_TrueColor",
+
+				formAt: 'image/jpg',
+				projection: projection,
+				tileGrid: new ol.tilegrid.WMTS({
+					origin: ol.extent.getTopLeft(projectionExtent),
+					resolutions: resolutions,
+					matrixIds: matrixIds,
+					tileSize: 512
+				}),
+//				extent: nasa_layers[i].extent,
+				extent: projectionExtent,
+				style: ''
+			})
+		});
+	}// loop
 	
-	initNasaLayers();
-}
+	initMap('mainMap',view_main,[ol3_layers[currentLayer]]);
+	//	initMap('northpoleMap',view_northpole,[def_layer]);
+	//	initMap('antarcticaMap',view_antarctica,[def_layer]);
+
+}//initMaps()
 
 function initMap(id, view,layers){
-	var map_main = new ol.Map({
+	map_main = new ol.Map({
         target: id,
         layers: layers,
         view: view});
@@ -120,12 +124,24 @@ function initNasaLayers(){
 	var parser = new ol.format.WMSCapabilities();
 	
 	$.ajax('http://localhost:8383/AnimateYourWorld_FSU/test.xml').then(function(response) {
-		var allLayers = $(response).find('Layer').each(addLayer);
+		var url = $($(response).find('[name=GetTile] HTTP').children()[1]).attr("xlink:href");
+		
+		var allLayers = $(response).find('Layer').each(function (idx,layer){
+			var name = $(layer).find('Title').text();
+			//TODO I do not know if this will always work (removing 'default')
+			name = name.replace('default','');
+			var matrixSet = $.trim($(layer).find('TileMatrixSetLink').text());
+			var extent =  [$(layer).find('LowerCorner').text(), $(layer).find('UpperCorner').text()];
+			nasa_layers[idx] = new NasaLayer(name,extent,"",matrixSet,"","");
+		});
+		
+		var select = $("#baseLayers");
+		for(var i=0;i<nasa_layers.length;i++){
+			nasa_layers[i].wmts = url;
+			select.append($('<option>',{value:i, text:nasa_layers[i].name}));
+		}
+		
+		initMaps();
+		
 	});
-}
-
-function addLayer(idx){
-		console.log(this);
-		var name = $(this).find('Title').text();
-		var matrixSet = $(this).find('TileMatrixSetLink').text();
 }
