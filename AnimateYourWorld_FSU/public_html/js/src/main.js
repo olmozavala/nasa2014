@@ -123,7 +123,8 @@ function initMap(id, view,layers){
 function initNasaLayers(){
 	var parser = new ol.format.WMSCapabilities();
 	
-	$.ajax('http://localhost:8383/AnimateYourWorld_FSU/test.xml').then(function(response) {
+//	$.ajax('http://localhost:8383/AnimateYourWorld_FSU/test.xml').then(function(response) {
+	$.ajax('http://map1.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi?SERVICE=WMTS&request=GetCapabilities').then(function(response) {
 		var url = $($(response).find('[name=GetTile] HTTP').children()[1]).attr("xlink:href");
 		
 		var allLayers = $(response).find('Layer').each(function (idx,layer){
