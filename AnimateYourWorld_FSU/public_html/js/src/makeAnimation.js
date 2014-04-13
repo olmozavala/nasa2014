@@ -4,22 +4,6 @@
  * and open the template in the editor.
  */
 
-
-function initBaseLayers(){
-	$("#baseLayers").change(function() {
-		var new_idx = parseInt($("select option:selected").val());
-		updateBaseLayer(new_idx);
-	});
-}
-
-function updateBaseLayer(new_idx){
-	//The order of these 4 instructions is important, do not change
-	map_main.removeLayer(ol3_layers[currentLayer]);
-	currentLayer = new_idx;
-	updateLayerDate();// This is required to update the date of the new layer
-	map_main.addLayer(ol3_layers[new_idx]);
-}
-
 var lastUpdateOfUrls = new Date();
 /**
  * This function is used to save the current 'tiles' that the user is 'viewing' 
@@ -42,16 +26,11 @@ function saveCurrentRequests(url){
 	current_requests[size] = url;
 }
 
-function fillDropdown(nasa_layers,currentLayer,url){
-	
-	//Filling the base layers dropdown
-	var select = $("#baseLayers");
-	for(var i=0;i<nasa_layers.length;i++){
-		nasa_layers[i].wmts = url;
-		option = new Option(nasa_layers[i].name, i)
-		if(i === currentLayer){
-			option.selected = true;
-		}
-		select.append(option);
-	}
+function makeAnimation(){
+	var textArea = $("textarea");
+	var count = $("#countUrls");
+	count.text(current_requests.length);
+	textArea.val(current_requests);
 }
+
+
