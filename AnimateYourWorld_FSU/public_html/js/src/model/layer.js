@@ -1,5 +1,5 @@
 
-function NasaLayer(n, ext, url,mtrx,mres,pro,z,f, dateFrom, dateTo){
+function NasaLayer(n, ext, url,mtrx,mres,pro,z,f, dateFrom, dateTo,res){
 	this.name = n;//Name of the layer
 	this.extent = ext;// Extend
 	this.wmts = url;// Text summarizing projection and resolution
@@ -10,5 +10,6 @@ function NasaLayer(n, ext, url,mtrx,mres,pro,z,f, dateFrom, dateTo){
 	this.format = f;// Image format jpg or png
 	this.from = dateFrom;
 	this.to = dateTo;
+	this.resolutions = res;
 };
 

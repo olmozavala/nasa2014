@@ -9,6 +9,9 @@ function initGui(){
 	initDatePickers();
 
 	resizeMaps();
+
+	$("#addRange").click(addDateRange);
+	$("#makeAnimation").click(makeAnimation);
 }
 
 function resizeMaps(){
@@ -17,39 +20,15 @@ function resizeMaps(){
 	
 	//	$("#mainMap").css({'width':vpw+'px'});
 //	var mapHeight = Math.ceil(vph/2); 
-	var mapHeight = vph;
+//	var mapHeight = vph;
+	var mapHeight = 400;
 	$("#mainMap").css({'height':mapHeight+'px'});
 	
 	var o_map_northpole= $("#northpoleMap");
 	var o_map_antarctica = $("#antarcticaMap");
 }
 
-function initDatePickers(){
 
-	$("#datepicker").datepicker();
-	$("#datepicker").datepicker("option","dateFormat", 'yy-mm-dd');
-	$("#datepicker").val($.datepicker.formatDate('yy-mm-dd', new Date()));
-	$("#datepicker").change(updateLayerDate);
-	
-	$( "#from" ).datepicker({
-		dateFormat: 'yy-mm-dd',
-		defaultDate: "-1w",
-		changeMonth: true,
-		numberOfMonths: 1,
-		onClose: function( selectedDate ) {
-			$( "#to" ).datepicker( "option", "minDate", selectedDate );
-		}
-    });
-    $( "#to" ).datepicker({
-		dateFormat: 'yy-mm-dd',
-		defaultDate: "-1w",
-		changeMonth: true,
-		numberOfMonths: 1,
-		onClose: function( selectedDate ) {
-			$( "#from" ).datepicker( "option", "maxDate", selectedDate );
-		}
-    });
-}
 
 function updateAvailableTimes(){
 

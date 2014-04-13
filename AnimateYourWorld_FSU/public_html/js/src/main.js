@@ -91,6 +91,8 @@ function initMaps(){
 			extent: projectionExtent,
 			style: ''
 		});
+
+		nasa_layers[i].resolutions = resolutions;
 		
 		
 		ol3_layers[i] = new ol.layer.Tile({ source: tempSource});
