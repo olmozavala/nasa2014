@@ -23,6 +23,7 @@ function updateLayerDate(){
 	refreshMap();
 	
 	layerSource.tileUrlFunction = function() {
+		console.log("updted");
 		var url = superTileUrlFunction.apply(layerSource, arguments);
 		//Checks if the url already has a TIME parameter
 		if(url){

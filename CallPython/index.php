@@ -8,20 +8,31 @@ and open the template in the editor.
     <head>
         <meta charset="UTF-8">
         <title></title>
+		<script src="js/src/animate.js" type="text/javascript"></script>
     </head>
     <body>
         <?php
 
 		$urls = $_POST['urls'];
-		echo("Post:" .  $urls);
+//		echo("Post:" .  $urls);
 //		echo("<br>----------------------</br>");
 
-		echo("I am here!!");
-		echo("<br> ------------------------------------------------------------ <br>");
+//		echo("<br> ------------------------------------------------------------ <br>");
 //		$mystring = system("python makeAnimation.py 'que pex'", $retval);
-		$mystring = system("python url2video.py '".$urls."'", $retval);
-		echo("<br>");
-		echo($mystring);
+//		echo("sadfsdf");
+		$mystring = system("python url2video.py '".$urls."' 100", $retval);
+//		echo("<br>");
+//		echo($mystring);
         ?>
+		<img id="frame" src="" width="40%" height="40%">
+			
+		<br />
+		<button type="button" onClick="playimg()">Play</button>
+		<button type="button" onClick="pause()">Pause</button>
+			
+		<button type="button" onClick="playReverse()">Reverse</button>
+		<button type="button" onClick="restart()">Restart</button>
+			
+			
     </body>
 </html>
