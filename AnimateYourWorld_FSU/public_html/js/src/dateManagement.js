@@ -72,8 +72,10 @@ function initDatePickers(){
 function addDateRange(){
 	var startdate = $("#from").val();
 	var enddate = $("#to").val();
-	var d1 = new Date(startdate.substring(0,4),startdate.substring(5,7)-1,startdate.substring(8,10));
-	var d2 = new Date(enddate.substring(0,4),enddate.substring(5,7)-1,enddate.substring(8,10));
+	var startDateStr = startdate.split("-");
+	var endDateStr = enddate.split("-");
+	var d1 = new Date(startDateStr[0],startDateStr[1],startDateStr[2]);
+	var d2 = new Date(endDateStr[0],endDateStr[1],endDateStr[2]);
 	
 	var n1 = d1.getTime();
 	var n2 = d2.getTime();
@@ -88,16 +90,16 @@ function addDateRange(){
 		var partdatelist = new Array;
 		for(i = 0;i<=totaldays;i++){
 			c1.setTime(currentDate);
-			var dd = ("0" + c1.getDate()).slice(-2);
-			var mm = ("0" + (c1.getMonth() + 1)).slice(-2);
+			var dd = ("0" + c1.getDate() ).slice(-2);
+			var mm = ("0" + (c1.getMonth() )).slice(-2);
 			
 			partdatelist[i] = (yyyy-(yyyy-selectedYear)+j)+"-"+mm+"-"+dd;	
 			currentDate+=86400000;
 		}
 		dateRanges = dateRanges.concat(partdatelist);
 
-		var tempStart = (selectedYear+j)+"/"+d1.getMonth()+"/"+d1.getDay();
-		var tempEnd = (selectedYear+j)+"/"+d1.getMonth()+"/"+d1.getDay();
+		var tempStart = (selectedYear+j)+"/"+d1.getMonth()+"/"+d1.getDate();
+		var tempEnd = (selectedYear+j)+"/"+d2.getMonth()+"/"+d2.getDate();
 		addDateRangeText(tempStart,tempEnd);
 	}	
 	console.log(dateRanges);
