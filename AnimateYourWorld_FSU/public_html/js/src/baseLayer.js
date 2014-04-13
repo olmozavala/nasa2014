@@ -20,33 +20,6 @@ function updateBaseLayer(new_idx){
 	map_main.addLayer(ol3_layers[new_idx]);
 }
 
-function updateLayerDate(){
-	var newDate = $("#datepicker").val();
-	
-	var tempLayer= ol3_layers[currentLayer];
-	
-	var layerSource = tempLayer.getSource();
-	
-	var superTileUrlFunction = layerSource.tileUrlFunction;
-	
-	layerSource.tileUrlFunction = function() {
-		var url = superTileUrlFunction.apply(layerSource, arguments);
-		//Checks if the url already has a TIME parameter
-		if(url){
-			if(url.indexOf('TIME') !== -1){
-				//Remove old time
-				url = url.substring(0, url.length - 16);
-			}
-			url += "&TIME="+newDate; 
-			saveCurrentRequests(url);
-			return url; 
-		}
-		
-	};
-	
-}
-
-
 var lastUpdateOfUrls = new Date();
 /**
  * This function is used to save the current 'tiles' that the user is 'viewing' 
@@ -59,12 +32,10 @@ function saveCurrentRequests(url){
 	// two second, then we assume they are from a different view 
 	var threshold = 1000; 
 	if( (currentUpdate - lastUpdateOfUrls ) > threshold){
-		console.log((currentUpdate - lastUpdateOfUrls ));
 		lastUpdateOfUrls = currentUpdate;
-
-		console.log(current_requests.length);
 		current_requests = new Array();
 	}
+	console.log(url);
 	lastUpdateOfUrls = currentUpdate;
 
 	var size = current_requests.length;
