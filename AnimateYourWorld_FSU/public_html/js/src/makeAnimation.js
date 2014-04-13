@@ -37,7 +37,7 @@ function makeAnimation(){
 			subUrl = current_requests[i].substring(0,current_requests[i].length - 10);
 			text += subUrl+dateRanges[j]+"\n";
 		}
-		text += ("--------------- New Year ------------- \n");
+		text += ("day\n");
 	}
 	textArea.val(text);
 }

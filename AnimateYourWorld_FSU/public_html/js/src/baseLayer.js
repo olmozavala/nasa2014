@@ -18,28 +18,9 @@ function updateBaseLayer(new_idx){
 	currentLayer = new_idx;
 	updateLayerDate();// This is required to update the date of the new layer
 	map_main.addLayer(ol3_layers[new_idx]);
-}
 
-var lastUpdateOfUrls = new Date();
-/**
- * This function is used to save the current 'tiles' that the user is 'viewing' 
- * @param {type} url
- * @returns {undefined}
- */
-function saveCurrentRequests(url){
-	var currentUpdate = new Date();
-	//TODO this is a patch, if the tiles get updated after
-	// two second, then we assume they are from a different view 
-	var threshold = 1000; 
-	if( (currentUpdate - lastUpdateOfUrls ) > threshold){
-		lastUpdateOfUrls = currentUpdate;
-		current_requests = new Array();
-	}
-//	console.log(url);
-	lastUpdateOfUrls = currentUpdate;
+	var firstDate = nasa_layers[currentLayer].from;
 
-	var size = current_requests.length;
-	current_requests[size] = url;
 }
 
 function fillDropdown(nasa_layers,currentLayer,url){
