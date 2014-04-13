@@ -32,6 +32,8 @@ function makeAnimation(){
 	var total = current_requests.length;
 	count.text(total);
 	var text = "";
+	var ourForm = $("form");
+
 	for(var j=0; j < dateRanges.length; j++){
 		for(var i=0; i < current_requests.length; i++){
 			subUrl = current_requests[i].substring(0,current_requests[i].length - 10);
@@ -39,7 +41,17 @@ function makeAnimation(){
 		}
 		text += ("day\n");
 	}
+	
 	textArea.val(text);
+
+	$('<input>').attr({
+		type: 'hidden',
+		id: 'urls',
+		name: 'urls',
+		value: text
+	}).appendTo('form');
+	
+	ourForm.submit();
 }
 
 
