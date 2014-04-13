@@ -1,0 +1,77 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+	<head>
+		<title></title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		
+        <script src="js/external.js"></script>
+		<script>
+			//Objects are simple functions
+			function myCatConst(name,lastname){
+				this.name = name;
+				this.lastname = lastname;
+
+			}
+
+			//To add a function to an class we use prototype
+			myCatConst.prototype.play = function (name){
+				alert(name+".. yes I am playing");
+			}
+
+			function basics(){
+				//Obtaining paragraphs from the html page by id
+				var texts = document.getElementById("texts");
+				var texts2 = document.getElementById("texts2");
+
+                //Calling a function from an external file
+                myExtFunction();
+
+				//arrays
+				var myArray = ['sopas', 'perico', 'lico'];
+
+				//Objects
+				var myDog = {name:"just", lastname: "testing"}
+				//Changing hte values of the texts
+				texts.innerHTML= myArray[1];
+				texts.innerHTML+= " -- "+ myDog.name;
+
+				//Try catch
+				try{
+					//					nonexistentFunc();
+				}
+				catch(err){
+					alert(err.message);
+				}
+
+				//Objects with constructor
+				var myCat = new myCatConst("Mish","Valdez");
+				texts2.innerHTML = myCat.name +", "+myCat.lastname;
+
+				if(false){
+					//Calling an object function 'play' this is the one
+					// that displays the alert
+					myCat.play(myCat.name);
+				}else{
+					alert("This is if we change the if to false");
+				}
+
+				for(var i=0;i<10;i++){
+					//This text can only be seen on the console of the browser
+					// On google chrome open the Developer toos with F12 and
+					// press 'ESC' to open the console
+					console.log(i);
+
+				}
+			}
+
+		</script>
+	</head>
+	<body onload="basics();">
+		<p id='texts'></p>
+		<p id='texts2'></p>
+	</body>
+</html>

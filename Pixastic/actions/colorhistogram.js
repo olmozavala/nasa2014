@@ -21,7 +21,7 @@ Pixastic.Actions.colorhistogram = {
 		var paint = !!(params.options.paint);
 
 		var returnValue = params.options.returnValue;
-		if (typeof returnValue.values != "array") {
+		if (typeof returnValue.values != "array") {		    
 			returnValue.rvals = [];
 			returnValue.gvals = [];
 			returnValue.bvals = [];
