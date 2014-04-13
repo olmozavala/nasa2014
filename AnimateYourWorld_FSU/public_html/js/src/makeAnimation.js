@@ -32,26 +32,55 @@ function makeAnimation(){
 	var total = current_requests.length;
 	count.text(total);
 	var text = "";
-	var ourForm = $("form");
+
+	var dayDelimiter = "\n";
+	var tileDelimiter = "\n";
+
+//	var dayDelimiter = "*";
+//	var tileDelimiter = "@";
 
 	for(var j=0; j < dateRanges.length; j++){
 		for(var i=0; i < current_requests.length; i++){
 			subUrl = current_requests[i].substring(0,current_requests[i].length - 10);
-			text += subUrl+dateRanges[j]+"\n";
+			text += subUrl+dateRanges[j]+tileDelimiter;
 		}
-		text += ("day\n");
+//		text += (dayDelimiter);
 	}
 	
 	textArea.val(text);
 
+/*
+	var action ="http://localhost/CallPython/index.php" ;
+
+	$.ajax({   
+		type: 'POST',   
+		url: action,   
+		data: "urls="+text,
+		success: animationHasBeenBuilt,
+		dataType: "html"
+	});
+	*/
+	var ourForm = $("form");
+	
 	$('<input>').attr({
 		type: 'hidden',
 		id: 'urls',
 		name: 'urls',
 		value: text
 	}).appendTo('form');
+
+	$('<input>').attr({
+		type: 'hidden',
+		id: 'urls',
+		name: 'urls',
+		value: text
+	}).appendTo(ourForm);
 	
 	ourForm.submit();
+}
+
+function animationHasBeenBuilt(output){
+	console.log(output);
 }
 
 
