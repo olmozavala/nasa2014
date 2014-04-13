@@ -60,15 +60,21 @@
 						<input type="text" id="to" name="to">
 					</div>
 					How many years back?
-					<select id="selectyear">
+					<select id="selectedYear">
 					  <option value="2014">2014</option>
 					  <option value="2013">2013</option>
 					  <option value="2012">2012</option>
 					  <option value="2011">2011</option>
 					  <option value="2010">2010</option>
 					</select>
-					<p><a class="btn btn-default" href="#" id="addRange" role="button">Add Range</a>	
-					<p><a class="btn btn-default" href="#" id="makeAnimation" role="button">Make animation</a></p>
+					<p>
+					<a class="btn btn-default" href="#" id="addRange" role="button">Add Range</a>	
+					<!--<a class="btn btn-default" href="#" id="addMultipleRange" role="button">Add Range for each year</a>-->	
+					</p>
+						<div id="selectedRanges" style="display: none">
+							<h3>Selected ranges</h3>
+							<ul id="selectedRangesTexts"></ul>
+						</div>
 				</div>
 				<div class="col-xs-8">
 					<div class="row">
@@ -97,9 +103,10 @@
 			</div>
 			<div class="row">
 				<div class="col-xs-12">
+					<p><a class="btn btn-default" href="#" id="makeAnimation" role="button">Make animation</a></p>
 					<div class="form-group">
 						<p >Total number of urls: <span id="countUrls"></p>
-						<textarea class="form-control" rows="10"></textarea>
+						<textarea class="form-control" rows="30"></textarea>
 					</div>
 				</div>
 			</div>

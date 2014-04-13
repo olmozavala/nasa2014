@@ -29,8 +29,17 @@ function saveCurrentRequests(url){
 function makeAnimation(){
 	var textArea = $("textarea");
 	var count = $("#countUrls");
-	count.text(current_requests.length);
-	textArea.val(current_requests);
+	var total = current_requests.length;
+	count.text(total);
+	var text = "";
+	for(var j=0; j < dateRanges.length; j++){
+		for(var i=0; i < current_requests.length; i++){
+			subUrl = current_requests[i].substring(0,current_requests[i].length - 10);
+			text += subUrl+dateRanges[j]+"\n";
+		}
+		text += ("--------------- New Year ------------- \n");
+	}
+	textArea.val(text);
 }
 
 
