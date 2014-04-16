@@ -43,9 +43,14 @@ function initDatePickers(){
 	$("#datepicker").datepicker({
 		dateFormat:'yy-mm-dd',
 		changeMonth: true,
-		changeYear: true
+		changeYear: true,
+		maxDate: "+d"
 	});
-	$("#datepicker").val($.datepicker.formatDate('yy-mm-dd', new Date()));
+
+	var yesterday = new Date(); 
+	yesterday.setDate(yesterday.getDate() - 1);
+
+	$("#datepicker").val($.datepicker.formatDate('yy-mm-dd', yesterday));
 	$("#datepicker").change(updateLayerDate);
 	
 	$( "#from" ).datepicker({
@@ -54,13 +59,15 @@ function initDatePickers(){
 		changeMonth: true,
 		changeYear: true,
 		numberOfMonths: 1,
+		maxDate: "-1d",
 		onClose: function( selectedDate ) {
 			$( "#to" ).datepicker( "option", "minDate", selectedDate );
 		}
     });
     $( "#to" ).datepicker({
 		dateFormat: 'yy-mm-dd',
-		defaultDate: "-1w",
+		defaultDate: "+d",
+		maxDate: "+d",
 		changeYear: true,
 		changeMonth: true,
 		numberOfMonths: 1,

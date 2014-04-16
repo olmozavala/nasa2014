@@ -34,8 +34,8 @@ function runApp(){
 function initMaps(){
 	main_view = new ol.View2D({
 		projection: 'EPSG:4326',
-		center: [87,25],
-		zoom: 1
+		center: [0,0],
+		zoom: 3
 	});
 	var view_northpole = new ol.View2D({
 		center: ol.proj.transform([37.41, 8.82], 'EPSG:4326', 'EPSG:3857'),
@@ -113,7 +113,6 @@ function initMap(id, view,layers){
         layers: layers,
         view: view});
 }
-
 
 function initNasaLayers(){
 	

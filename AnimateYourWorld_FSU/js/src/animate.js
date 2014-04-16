@@ -1,8 +1,22 @@
-  maxval=10;
-	var slides = new Array;
-	for (i=0;i<=maxval;i++){
-		slides[i] = ["0000"+i];
-	}
+var slides = new Array;
+var maxval=0;
+var txtFile = new XMLHttpRequest();
+txtFile.open("GET", "http://localhost/public_html/numImages.txt", true);
+txtFile.onreadystatechange = function() {
+  if (txtFile.readyState === 4) {  // Makes sure the document is ready to parse.
+    if (txtFile.status === 200) {  // Makes sure it's found the file.
+      maxval=parseInt(txtFile.responseText)+1;
+			console.log("maxval=",maxval);
+			for (i=0;i<=maxval+1;i++){
+				slides[i] = ["0000"+i];
+			}
+    }
+  }
+}
+
+txtFile.send(null);
+
+	console.log("outside:maxval=",maxval);
 	
 	index=0;
 	timer=0;
@@ -19,7 +33,7 @@
 				clearInterval(timer);
 			}
 			else{
-				console.log(slides[index]);
+				console.log(index);
 				document.getElementById('frame').src = "images/cloudfree/"+slides[index++]+".png";
 			}
 		}
@@ -34,7 +48,7 @@
 	
 	function restart(){
 	
-		index=0;
+		index=1;
 		document.getElementById('frame').src = "images/"+slides[index]+".png";
 	
 	}
@@ -44,11 +58,11 @@
 		console.log(index);
 		clearInterval(timer);
 		timer=setInterval(decrement,1000);
-		index=index-2;
+		index=index-1;
 		function decrement(){
 				console.log("index=",index);
 				document.getElementById('frame').src = "images/"+slides[index--]+".png";
-		if(index<0){
+		if(index<=0){
 				clearInterval(timer);
 		}
 	}

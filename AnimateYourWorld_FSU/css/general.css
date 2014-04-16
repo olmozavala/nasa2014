@@ -1,0 +1,26 @@
+/* 
+    Created on : Apr 15, 2014, 12:21:47 PM
+    Author     : olmozavala
+*/
+/* line 7, ../scss/general.scss */
+.fullwidth {
+  width: 100%;
+}
+
+/* line 11, ../scss/general.scss */
+.blue {
+  background-color: blue;
+  min-height: 10px;
+}
+
+/* line 16, ../scss/general.scss */
+.red {
+  background-color: red;
+  min-height: 10px;
+}
+
+/* line 20, ../scss/general.scss */
+.green {
+  background-color: green;
+  min-height: 10px;
+}

@@ -19,9 +19,8 @@ function resizeMaps(){
 	var vph = $(window).height();
 	
 	//	$("#mainMap").css({'width':vpw+'px'});
-//	var mapHeight = Math.ceil(vph/2); 
+	var mapHeight = Math.ceil(vph/2); 
 //	var mapHeight = vph;
-	var mapHeight = 400;
 	$("#mainMap").css({'height':mapHeight+'px'});
 	
 	var o_map_northpole= $("#northpoleMap");

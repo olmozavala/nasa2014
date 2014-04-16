@@ -1,0 +1,53 @@
+/* line 2, ../scss/main.scss */
+#mainMap {
+  width: 90%;
+  padding: 1%;
+}
+
+/* line 7, ../scss/main.scss */
+.mainContainer {
+  width: 90%;
+}
+
+/* line 11, ../scss/main.scss */
+.mainTitle {
+  width: 100%;
+  text-align: center;
+}
+
+/* line 16, ../scss/main.scss */
+.control-title {
+  text-align: center;
+}
+
+/* line 20, ../scss/main.scss */
+p {
+  text-align: center;
+}
+
+/* line 24, ../scss/main.scss */
+.btn-default, p {
+  margin-top: 1em;
+}
+
+/* line 28, ../scss/main.scss */
+h2 h3 {
+  text-align: center;
+}
+
+/* line 32, ../scss/main.scss */
+#baseLayers {
+  width: 385px;
+  margin: auto;
+  margin-top: 15px;
+}
+
+/* line 41, ../scss/main.scss */
+#selectedYear {
+  width: 6em;
+}
+
+/* line 45, ../scss/main.scss */
+#from, #to, #datepicker {
+  width: 8em;
+}
