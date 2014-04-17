@@ -9,21 +9,29 @@ and open the template in the editor.
         <meta charset="UTF-8">
         <title></title>
 		<script src="js/src/animate.js" type="text/javascript"></script>
+
     </head>
     <body>
         <?php
 
-		$urls = $_POST['urls'];
+		$urls = htmlspecialchars($_POST["urls"]);
+		$totImages = htmlspecialchars($_POST["numImages"]);
+
+//		echo $totImages;
 //		echo("Post:" .  $urls);
 //		echo("<br>----------------------</br>");
 
 //		echo("<br> ------------------------------------------------------------ <br>");
 //		$mystring = system("python makeAnimation.py 'que pex'", $retval);
 //		echo("sadfsdf");
-		$mystring = system("python url2video.py '".$urls."' 100", $retval);
+		$mystring = system("python url2video.py '".$urls."' 40", $retval);
 //		echo("<br>");
 //		echo($mystring);
         ?>
+
+		<script>
+			startAnimation(<?=$totImages; ?>);
+		</script>
 		<img id="frame" src="" width="40%" height="40%">
 			
 		<br />

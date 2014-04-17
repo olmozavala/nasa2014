@@ -19,7 +19,7 @@ function resizeMaps(){
 	var vph = $(window).height();
 	
 	//	$("#mainMap").css({'width':vpw+'px'});
-	var mapHeight = Math.ceil(vph/2); 
+	var mapHeight = Math.ceil(2*vph/3); 
 //	var mapHeight = vph;
 	$("#mainMap").css({'height':mapHeight+'px'});
 	

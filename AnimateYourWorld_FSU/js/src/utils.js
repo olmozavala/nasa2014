@@ -5,6 +5,14 @@
  */
 
 
+/**
+ * This function defines how many zoom layers are available for each type of 
+ * matrixset. If other types of matrixset get added then it is necessary
+ * to update the list with the new zoom levels 
+ * @param {string} matrixSet Contains a string with a summary of the projection
+ * and resolution of the layer.
+ * @returns {Number} Number of zoom levels
+ */
 function obtainZoomLevels(matrixSet){
 	switch(matrixSet){
 		case "EPSG4326_250m":

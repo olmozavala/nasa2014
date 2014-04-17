@@ -12,56 +12,43 @@ var lastUpdateOfUrls = new Date();
  */
 function saveCurrentRequests(url){
 	var currentUpdate = new Date();
-	//TODO this is a patch, if the tiles get updated after
-	// two second, then we assume they are from a different view 
-	var threshold = 1000; 
+	// We assume that requesting the layers takes less than 1 sec. 
+	var threshold = 500; 
 	if( (currentUpdate - lastUpdateOfUrls ) > threshold){
 		lastUpdateOfUrls = currentUpdate;
 		current_requests = new Array();
+		console.log("clear");
 	}
 //	console.log(url);
-	lastUpdateOfUrls = currentUpdate;
 
 	var size = current_requests.length;
 	current_requests[size] = url;
 }
 
 function makeAnimation(){
+
 	var textArea = $("textarea");
 	var count = $("#countUrls");
 	var total = current_requests.length;
 	count.text(total);
+
 	var text = "";
-
-	var dayDelimiter = "\n";
 	var tileDelimiter = "\n";
-
-//	var dayDelimiter = "*";
-//	var tileDelimiter = "@";
 
 	for(var j=0; j < dateRanges.length; j++){
 		for(var i=0; i < current_requests.length; i++){
 			subUrl = current_requests[i].substring(0,current_requests[i].length - 10);
 			text += subUrl+dateRanges[j]+tileDelimiter;
 		}
-//		text += (dayDelimiter);
 	}
 	
 	textArea.val(text);
+	console.log("The urls are:"+text);
 
-/*
-	var action ="http://localhost/CallPython/index.php" ;
+	var action ="animate.php";
 
-	$.ajax({   
-		type: 'POST',   
-		url: action,   
-		data: "urls="+text,
-		success: animationHasBeenBuilt,
-		dataType: "html"
-	});
-	*/
 	var ourForm = $("form");
-	
+
 	$('<input>').attr({
 		type: 'hidden',
 		id: 'urls',
@@ -71,16 +58,32 @@ function makeAnimation(){
 
 	$('<input>').attr({
 		type: 'hidden',
-		id: 'urls',
-		name: 'urls',
-		value: text
-	}).appendTo(ourForm);
-	
-	ourForm.submit();
+		id: 'numImages',
+		name: 'numImages',
+		value: dateRanges.length
+	}).appendTo('form');
+
+	$.ajax({   
+		type: 'POST',   
+		url: action,   
+		data: ourForm.serialize(),
+		success: animationSuccess,
+		fail: failedAnimation,
+		dataType: "html"
+	});
+
+	$("#loading").show();
+
 }
 
-function animationHasBeenBuilt(output){
+function failedAnimation(why){
+	alert("Building the animation failed");
+	console.log(why);
+}
+
+function animationSuccess(output){
+	$("#loading").hide();
 	console.log(output);
+	var win = window.open();
+	win.document.write(output);
 }
-
-
