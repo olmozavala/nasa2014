@@ -1,53 +1,81 @@
-/* line 2, ../scss/main.scss */
+/* line 3, ../scss/main.scss */
 #mainMap {
   padding-bottom: 1%;
   /*padding-top: 2%;*/
 }
 
-/* line 7, ../scss/main.scss */
+/* line 8, ../scss/main.scss */
 .mainContainer {
   width: 90%;
 }
 
-/* line 11, ../scss/main.scss */
+/* line 12, ../scss/main.scss */
 .mainTitle {
   width: 100%;
   text-align: center;
 }
 
-/* line 16, ../scss/main.scss */
+/* line 17, ../scss/main.scss */
 .control-title {
   text-align: center;
 }
 
-/* line 20, ../scss/main.scss */
+/* line 21, ../scss/main.scss */
 p {
   text-align: center;
 }
 
-/* line 24, ../scss/main.scss */
+/* line 25, ../scss/main.scss */
 .btn-default, p {
   margin-top: 1em;
 }
 
-/* line 28, ../scss/main.scss */
+/* line 29, ../scss/main.scss */
 h2 h3 {
   text-align: center;
 }
 
-/* line 32, ../scss/main.scss */
+/* line 33, ../scss/main.scss */
 #baseLayers {
   width: 385px;
   margin: auto;
   margin-top: 5px;
 }
 
-/* line 41, ../scss/main.scss */
+/* line 42, ../scss/main.scss */
 #selectedYear {
   width: 6em;
 }
 
-/* line 45, ../scss/main.scss */
+/* line 46, ../scss/main.scss */
 #from, #to, #datepicker {
   width: 8em;
+}
+
+/* line 50, ../scss/main.scss */
+.dropdown-backdrop {
+  position: static;
+}
+
+/* line 54, ../scss/main.scss */
+#myCanvas {
+  display: none;
+  position: absolute;
+  left: 30%;
+  top: 20%;
+  z-index: 1000;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  border-radius: 10px;
+  /*@include single-box-shadow;*/
+  -webkit-box-shadow: blue 20px 20px 20px;
+  -moz-box-shadow: blue 20px 20px 20px;
+  box-shadow: blue 20px 20px 20px;
+}
+
+/* line 65, ../scss/main.scss */
+#clearAnimation {
+  display: none;
 }

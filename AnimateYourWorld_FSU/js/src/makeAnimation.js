@@ -19,7 +19,6 @@ function saveCurrentRequests(url){
 		current_requests = new Array();
 		console.log("clear");
 	}
-//	console.log(url);
 
 	var size = current_requests.length;
 	current_requests[size] = url;
@@ -43,47 +42,8 @@ function makeAnimation(){
 	}
 	
 	textArea.val(text);
-	console.log("The urls are:"+text);
 
-	var action ="animate.php";
+	$("#clearAnimation").show();
+	startAnimation(text);
 
-	var ourForm = $("form");
-
-	$('<input>').attr({
-		type: 'hidden',
-		id: 'urls',
-		name: 'urls',
-		value: text
-	}).appendTo('form');
-
-	$('<input>').attr({
-		type: 'hidden',
-		id: 'numImages',
-		name: 'numImages',
-		value: dateRanges.length
-	}).appendTo('form');
-
-	$.ajax({   
-		type: 'POST',   
-		url: action,   
-		data: ourForm.serialize(),
-		success: animationSuccess,
-		fail: failedAnimation,
-		dataType: "html"
-	});
-
-	$("#loading").show();
-
-}
-
-function failedAnimation(why){
-	alert("Building the animation failed");
-	console.log(why);
-}
-
-function animationSuccess(output){
-	$("#loading").hide();
-	console.log(output);
-	var win = window.open();
-	win.document.write(output);
 }

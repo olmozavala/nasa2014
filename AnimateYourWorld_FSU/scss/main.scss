@@ -1,3 +1,4 @@
+@import "compass/css3";
 
 #mainMap{
 	padding-bottom: 1%;
@@ -44,4 +45,23 @@ h2 h3{
 
 #from, #to, #datepicker{
 	width: 8em;
+}
+
+.dropdown-backdrop {
+  position: static;
+}
+
+#myCanvas{
+	display:none;
+	position: absolute;
+	left: 30%;
+	top: 20%;
+	z-index: 1000;
+	@include border-radius(10px);
+	/*@include single-box-shadow;*/
+	@include box-shadow(blue 20px 20px 20px)
+}
+
+#clearAnimation{
+	display: none;
 }

@@ -4,14 +4,23 @@
  * and open the template in the editor.
  */
 
+
+
 function initGui(){
 	initBaseLayers();
 	initDatePickers();
 
 	resizeMaps();
 
+	
+	$(window).resize( resizeMaps);
 	$("#addRange").click(addDateRange);
 	$("#makeAnimation").click(makeAnimation);
+	$("#clearAnimation").click(function(){
+//		clearDateRanges();
+		$("#myCanvas").hide();
+		$("#clearAnimation").hide();
+	});
 }
 
 function resizeMaps(){

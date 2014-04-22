@@ -1,0 +1,14 @@
+/* 
+    Created on : Apr 16, 2014, 8:52:21 PM
+    Author     : olmozavala
+*/
+/* line 6, ../scss/animation.scss */
+#loading {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  left: 40%;
+  top: 40%;
+  display: none;
+  z-index: 1000;
+}
