@@ -52,16 +52,42 @@ h2 h3{
 }
 
 #myCanvas{
-	display:none;
+	background-color: #14687F;
+	@include border-radius(10px);
+	/*@include single-box-shadow;*/
+	@include box-shadow(#14687F 0px 0px 30px);
+	margin: 19px 0px 3px 0px;
+}
+
+#divCanvas{
 	position: absolute;
 	left: 30%;
 	top: 20%;
 	z-index: 1000;
-	@include border-radius(10px);
-	/*@include single-box-shadow;*/
-	@include box-shadow(blue 20px 20px 20px)
+	width: 100px;
+	height: 100px;
+	display: none;
 }
 
-#clearAnimation{
+#previousFrame, #nextFrame, #playAnimation{
 	display: none;
+	margin-top: 0px;
+}
+
+#divCanvas>div{
+	width:335px;
+	/*background-color: yellow;*/
+	position: relative;
+	left:200px;
+}
+
+
+#currentDate{
+	width:100px;
+	background-color: white;
+	@include border-radius(3px);
+	padding: 7px;
+	font-size: 15px;
+	position: relative;
+	left:200px;
 }

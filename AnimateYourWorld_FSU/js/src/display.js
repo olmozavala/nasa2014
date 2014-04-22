@@ -11,16 +11,10 @@ function initGui(){
 	initDatePickers();
 
 	resizeMaps();
-
 	
 	$(window).resize( resizeMaps);
 	$("#addRange").click(addDateRange);
-	$("#makeAnimation").click(makeAnimation);
-	$("#clearAnimation").click(function(){
-//		clearDateRanges();
-		$("#myCanvas").hide();
-		$("#clearAnimation").hide();
-	});
+	initAnimationButtons();
 }
 
 function resizeMaps(){

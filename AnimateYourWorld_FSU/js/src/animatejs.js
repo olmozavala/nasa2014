@@ -14,26 +14,53 @@ var rows = new Array;
 var dates = new Array;
 var urlTemplate = "";
 var currentDate = 0;
+var waitTimeBetweenFrames = 2000;
+
+function initAnimationButtons(){
+	$("#nextFrame").click(function(){
+		currentDate = currentDate < (dates.length - 1)? currentDate+1: 0;
+		createOneFrame(false,0) });
+	$("#previousFrame").click(function(){
+		currentDate = currentDate > 0? currentDate-1: dates.length -1;
+		createOneFrame(false,0) });
+	$("#playAnimation").click(function(){
+		createOneFrame(true,waitTimeBetweenFrames);});
+
+	$("#makeAnimation").click(makeAnimation);
+	$("#clearAnimation").click(function(){
+//		clearDateRanges();
+		$("#divCanvas").hide();
+	});
+
+}
 
 function startAnimation(urlstxt){
 
+	displayControls(false);
+	$("#loading").show();
 	cols = new Array;
 	rows = new Array;
 	dates = new Array;
 	var urls = urlstxt.split("\n");
+	var firstTileMatrix = 0;
 
 	for(i=0;i<urls.length-1;i++){
 		var currUrl = urls[i].split("&");
-		var currCol = currUrl[currUrl.length - 3].split("=")[1]; 
-		var currRow = currUrl[currUrl.length - 2].split("=")[1]; 
-		var currDate = currUrl[currUrl.length - 1].split("=")[1];
-		cols.push(currCol);
-		rows.push(currRow);
-		dates.push(currDate);
+		//Forces to use the same tile matrix (zoom level)
+		if(i===0){ firstTileMatrix = currUrl[currUrl.length - 4].split("=")[1]; }
+
+		if( firstTileMatrix === currUrl[currUrl.length - 4].split("=")[1]){
+			var currCol = currUrl[currUrl.length - 3].split("=")[1]; 
+			var currRow = currUrl[currUrl.length - 2].split("=")[1]; 
+			var currDate = currUrl[currUrl.length - 1].split("=")[1];
+			cols.push(parseInt(currCol));
+			rows.push(parseInt(currRow));
+			dates.push(currDate);
+		}
 	}
+	cols = makeUnique(cols).sort(sortNumber);
+	rows = makeUnique(rows).sort(sortNumber);
 	dates = makeUnique(dates).sort();
-	cols = makeUnique(cols).sort();
-	rows = makeUnique(rows).sort();
 
 //	var winHeight = $(window).height();
 //	redTileSize = Math.floor( (animSize*winHeight)/rows.length );
@@ -57,17 +84,23 @@ function startAnimation(urlstxt){
 	totalImages = cols.length*rows.length;
 	currentDate = 0;
 
-	createOneFrame(true);
+	createOneFrame(true, 0);
 }
 
-function createOneFrame(iterate){
+/**
+ * This function iterates "one frame" of the animation 
+ * @param {boolean} iterate Indicates if we should display all the frames or just one
+ * @param {int} wait Indicates how long to wait between frames
+ */
+function createOneFrame(iterate, wait){
 
 	var theCanvas = document.getElementById("myCanvas");
 	var ctx = theCanvas.getContext('2d');
 	var img = document.getElementById("frame");
+	$("#currentDate").text(dates[currentDate]);
 
-	for(j=0;j<rows.length;j++){
-		for(k=0;k<cols.length;k++){
+	for(var j=0;j<rows.length;j++){
+		for(var k=0;k<cols.length;k++){
 			var coltxt = "TileCol="+cols[k];
 			var rowtxt = "TileRow="+rows[j];
 			var datetxt = "Time="+dates[currentDate];
@@ -81,21 +114,50 @@ function createOneFrame(iterate){
 				ctx.drawImage(this,this.col*redTileSize,this.row*redTileSize,redTileSize,redTileSize);
 				countImages++;
 				if( countImages===totalImages){
+					countImages = 0;
 					//If we haven't finsh, then we start drawing the next frame
 					if(currentDate < (dates.length-1)){
-//						console.log("Draw one more date");
-						countImages = 0;
-						currentDate++;
-						if(iterate)
-							createOneFrame(iterate);
+						console.log("Draw one more date:"+currentDate+" Total:"+dates.length);
+						if(iterate){
+							currentDate++;
+							setTimeout( createOneFrame, wait, iterate, wait);
+						}
 					}else{
-						countImages = 0;
 						currentDate = 0;
+						displayControls(true);
+						if(iterate){
+							createOneFrame(false,0);
+						}
 					}
 				}
 			};
 		}//cols
 	}//rows
+}
+
+function displayControls(display){
+	if(display){
+		$("#loading").hide();
+		$("#previousFrame").show();
+		$("#nextFrame").show();
+		$("#playAnimation").show();
+	}else{
+		$("#previousFrame").hide();
+		$("#nextFrame").hide();
+		$("#playAnimation").hide();
+	}
+
+}
+
+/**
+ * Function used to sort integer arrays 
+ * @param {int} a
+ * @param {int} b
+ * @returns {int} If a>b postive else negative
+ */
+function sortNumber(a,b){
+	// If a>b postive else negative
+	return a-b;
 }
 /**
  *	This function removes everything after  the "TileCol" element of an array

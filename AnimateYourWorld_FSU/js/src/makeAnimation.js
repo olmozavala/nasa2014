@@ -43,7 +43,7 @@ function makeAnimation(){
 	
 	textArea.val(text);
 
-	$("#clearAnimation").show();
+	$("#divCanvas").show();
 	startAnimation(text);
 
 }

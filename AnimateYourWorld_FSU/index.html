@@ -119,8 +119,6 @@
 		<div id="btnAnimContainer" class="col-xs-5 col-xs-offset-3 col-sm-3 col-sm-offset-5" style="display: none">
 			<a class="btn btn-success" id="makeAnimation" 
 					role="button">Make animation</a>
-			<a class="btn btn-success" id="clearAnimation" 
-					role="button">Clear animation</a>
 		</div>
 	</form>
 	<footer>
@@ -136,10 +134,18 @@
 				&copy; 2014</p>
 		</div>
 	</footer>
-	<div id="loading" >
-		<img src="img/Loading_Animation.gif" width="100" alt="loading" height="100">
-	</div>
-	<canvas id="myCanvas" width="500" height="500" style="background-color: blue"></canvas>
+	<div id="divCanvas">
+		<span id="currentDate">2014/10/10</span><br>
+		<canvas id="myCanvas" width="500" height="500" ></canvas><br>
+		<div>
+			<img src="img/Loading_Animation.gif" width="20" id="loading" alt="loading" height="20">
+			<a class="btn btn-default" id="previousFrame" role="button">Previous</a>
+			<a class="btn btn-default" id="nextFrame" role="button">Next</a>
+			<a class="btn btn-default" id="playAnimation" role="button">Play</a>
+			<a class="btn btn-success" id="clearAnimation" role="button">Clear animation</a>
+		</div>
+	</div> 
+	
 	<!--
 	<div class="row">
 		<div class="col-xs-12">
