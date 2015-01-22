@@ -2,7 +2,7 @@
 goog.provide('animate');
 
 goog.require('ol.Map');
-goog.require('ol.View2D');
+goog.require('ol.View');
 goog.require('ol.extent');
 goog.require('ol.layer.Tile');
 goog.require('ol.proj');
@@ -32,17 +32,17 @@ function runApp(){
 }
 
 function initMaps(){
-	main_view = new ol.View2D({
+	main_view = new ol.View({
 		projection: 'EPSG:4326',
 		center: [0,0],
 		zoom: 3
 	});
-	var view_northpole = new ol.View2D({
+	var view_northpole = new ol.View({
 		center: ol.proj.transform([37.41, 8.82], 'EPSG:4326', 'EPSG:3857'),
 		//		center: ol.proj.transform([0, 90], 'EPSG:4326', 'EPSG:3857'),
 		zoom: 4
 	});
-	var view_antarctica = new ol.View2D({
+	var view_antarctica = new ol.View({
 		center: ol.proj.transform([37.41, 8.82], 'EPSG:4326', 'EPSG:3857'),
 		//		center: ol.proj.transform([0, -90], 'EPSG:4326', 'EPSG:3857'),
 		zoom: 4
