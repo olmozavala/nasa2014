@@ -15,7 +15,7 @@ goog.require('ol.format.WMSCapabilities');
 
 var nasa_layers = new Array();
 var ol3_layers = new Array(81);
-var currentLayer = 46;
+var currentLayer = 47; 
 var map_main;
 var main_view;
 
@@ -29,6 +29,7 @@ function runApp(){
 	initNasaLayers();
 	
 	initGui();
+
 }
 
 function initMaps(){
@@ -52,13 +53,11 @@ function initMaps(){
 	var projectionExtent = projection.getExtent();
 	
 	var attribution = new ol.Attribution({
-		html: "<a href='http://ol3js.org'>" +
-				"OpenLayers</a>&nbsp;&nbsp;&nbsp;" +
-				"<a href='https://earthdata.nasa.gov/gibs'>" +
-				"NASA EOSDIS GIBS</a>&nbsp;&nbsp;&nbsp;" +
+		html: "<a href='https://earthdata.nasa.gov/gibs'>" +
+				"NASA EOSDIS GIBS</a>" +
 				"</a>"  +
 				"<a href='http://owgis.org'>" +
-				"OWGIS</a>&nbsp;&nbsp;&nbsp;" +
+				"OWGIS</a>" +
 				"</a>" 
 	});
 	
@@ -106,41 +105,80 @@ function initMaps(){
 	// Run once the updateLayerDate function in order
 	// to add the TIME parameter into the main layer
 	updateLayerDate();
+   
 }//initMaps()
 
 function initMap(id, view,layers){
+	
+	var layercanvas = new ol.layer.Image({
+		source: new ol.source.ImageCanvas({
+			canvasFunction: canvasFunction,
+			projection: 'EPSG:4326'
+		})
+	});	
+	
 	map_main = new ol.Map({
         target: id,
         layers: layers,
         view: view});
+	
+	map_main.addLayer(layercanvas);
 }
 
 function initNasaLayers(){
 	
-	$.ajax('http://map1.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi?SERVICE=WMTS&request=GetCapabilities').then(function(response) {
-		var url = $($(response).find('[name=GetTile] HTTP').children()[1]).attr("xlink:href");
-		
-		$(response).find('Layer').each(function (idx,layer){
-			var name = $(layer).find('Title').text();
-			
-			//TODO I do not know if this will always work (removing 'default')
-			name = name.replace('default','');
-			
-			var matrixSet = $.trim($(layer).find('TileMatrixSetLink').text());
-			var zoomLevels = obtainZoomLevels(matrixSet);
-			var format = $.trim($(layer).find('Format').text());
-			
-			var extent =  [$(layer).find('LowerCorner').text(), $(layer).find('UpperCorner').text()];
-			
-			var times = $($(layer).find('Dimension')).find('Value').text().split('/');
-			
-			//All layers have the same max resolution
-			nasa_layers[idx] = new NasaLayer(name,extent,"",matrixSet,0.5625,"",zoomLevels,format,times[0],times[1]);
-			
+	useGeoserver = false;
+	if(useGeoserver){
+		$.ajax('http://132.248.8.238:8080/geoserver/wms?service=WMS&version=1.3.0&request=GetCapabilities').then(function(response) {
+			fillForGeoserver(response);
 		});
+	}else{
+		$.ajax('http://map1.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi?SERVICE=WMTS&request=GetCapabilities').then(function(response) {
+			var url = $($(response).find('[name=GetTile] HTTP').children()[1]).attr("xlink:href");
+			
+			$(response).find('Layer').each(function (idx,layer){
+				var name = $(layer).find('Title').text();
+				
+				//TODO I do not know if this will always work (removing 'default')
+				name = name.replace('default','');
+				
+				var matrixSet = $.trim($(layer).find('TileMatrixSetLink').text());
+				var zoomLevels = obtainZoomLevels(matrixSet);
+				var format = $.trim($(layer).find('Format').text());
+				
+				var extent =  [$(layer).find('LowerCorner').text(), $(layer).find('UpperCorner').text()];
+				
+				var times = $($(layer).find('Dimension')).find('Value').text().split('/');
+				
+				//All layers have the same max resolution
+				nasa_layers[idx] = new NasaLayer(name,extent,"",matrixSet,0.5625,"",zoomLevels,format,times[0],times[1]);
+			});
+			
+			fillDropdown(nasa_layers,currentLayer,url);
+			
+			initMaps();
+		});
+	}
+}
+
+function fillForGeoserver(response){
+	var url = $($(response).find('OnlineResource')[0]).attr("xlink:href");
+	
+	$(response).find('Layer[queryable]').each( function (idx,layer){
+		var name = $(layer).find('Name').first().text();
 		
-		fillDropdown(nasa_layers,currentLayer,url);
+		var format = "image/png"
 		
-		initMaps();
+		var bbox = $(layer).find("[CRS*=EPSG]");
+		var extent = [bbox.attr('minx') +" "+ bbox.attr('miny'),
+			bbox.attr('maxx') +" "+ bbox.attr('maxy')];
+		
+		//All layers have the same max resolution
+		nasa_layers[idx] = new NasaLayer(name,extent,"","","","","",format,"","");
+		
 	});
+	
+	fillDropdown(nasa_layers,currentLayer,url);
+	
+	initMaps();
 }

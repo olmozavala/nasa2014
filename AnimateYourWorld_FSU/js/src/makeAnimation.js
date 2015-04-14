@@ -17,23 +17,27 @@ function saveCurrentRequests(url){
 	if( (currentUpdate - lastUpdateOfUrls ) > threshold){
 		lastUpdateOfUrls = currentUpdate;
 		current_requests = new Array();
-		console.log("clear");
+		console.log("---------- Clearing prev urls ----------");
 	}
 
+	var currUrl = url.split("&");
+	var currCol = currUrl[currUrl.length - 3].split("=")[1]; 
+	var currRow = currUrl[currUrl.length - 2].split("=")[1]; 
+	console.log("Col: "+currCol+"  Row: "+currRow);
 	var size = current_requests.length;
 	current_requests[size] = url;
 }
 
 function makeAnimation(){
-
+	
 	var textArea = $("textarea");
 	var count = $("#countUrls");
 	var total = current_requests.length;
 	count.text(total);
-
+	
 	var text = "";
 	var tileDelimiter = "\n";
-
+	
 	for(var j=0; j < dateRanges.length; j++){
 		for(var i=0; i < current_requests.length; i++){
 			subUrl = current_requests[i].substring(0,current_requests[i].length - 10);
@@ -42,8 +46,7 @@ function makeAnimation(){
 	}
 	
 	textArea.val(text);
-
+	
 	$("#divCanvas").show();
-	startAnimation(text);
-
+	startAnimation();
 }

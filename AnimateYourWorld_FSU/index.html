@@ -20,11 +20,16 @@
 	<link rel="stylesheet" href="css/general.css">
 	<link rel="stylesheet" href="css/animation.css">
 	
-	<script src="http://ol3js.org/en/master/build/ol.js" type="text/javascript"></script>
+	<!--<script src="http://ol3js.org/en/master/build/ol.js" type="text/javascript"></script>-->
 	<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.0.js"><\/script>')</script>
 	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
 	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
 	
+	<!--<script src="http://resources.programmingclosure.com/closure-lite.js"></script>-->
+	<script src="js/vendor/ol-debug.js"></script>
+	<!--<script src="js/vendor/ol.js"></script>-->
+
 	<script src="js/src/makeAnimation.js" type="text/javascript"></script>
 	<script src="js/src/dateManagement.js" type="text/javascript"></script>
 	<script src="js/src/utils.js" type="text/javascript"></script>
@@ -134,14 +139,18 @@
 				&copy; 2014</p>
 		</div>
 	</footer>
+	<canvas id="myFakeCanvas" width="500" height="500" ></canvas><br>
 	<div id="divCanvas">
 		<span id="currentDate">2014/10/10</span><br>
 		<canvas id="myCanvas" width="500" height="500" ></canvas><br>
 		<div>
 			<img src="img/Loading_Animation.gif" width="20" id="loading" alt="loading" height="20">
+			<a class="btn btn-default" id="firstFrame" role="button">First</a>
 			<a class="btn btn-default" id="previousFrame" role="button">Previous</a>
 			<a class="btn btn-default" id="nextFrame" role="button">Next</a>
+			<a class="btn btn-default" id="lastFrame" role="button">Last</a>
 			<a class="btn btn-default" id="playAnimation" role="button">Play</a>
+			<a class="btn btn-default" id="stopAnimation" role="button">Stop</a>
 			<a class="btn btn-success" id="clearAnimation" role="button">Clear animation</a>
 		</div>
 	</div> 

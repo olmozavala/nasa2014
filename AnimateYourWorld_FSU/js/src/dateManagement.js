@@ -1,4 +1,3 @@
-
 var dateRanges = new Array;
 
 function refreshMap(){
@@ -115,6 +114,7 @@ function addDateRange(){
 			selectedYear = yyyy;
 		}
 
+		dates = new Array();
 		for(var j = 0;j <= (yyyy-selectedYear);j++){
 			currentDate  =  n1;
 			var partdatelist = new Array;
@@ -124,6 +124,7 @@ function addDateRange(){
 				var mm = ("0" + (c1.getMonth() )).slice(-2);
 				
 				partdatelist[i] = (yyyy-(yyyy-selectedYear)+j)+"-"+mm+"-"+dd;	
+				dates.push(partdatelist[i]);
 				currentDate+=86400000;
 			}
 			dateRanges = dateRanges.concat(partdatelist);

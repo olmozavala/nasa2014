@@ -30,7 +30,6 @@ function playimg(){
 	}
 }
 	
-	
 function pause(){
 		
 	clearInterval(timer);
