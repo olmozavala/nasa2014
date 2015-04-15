@@ -51,12 +51,8 @@ h2 h3{
   position: static;
 }
 
-#myCanvas{
-	background-color: #14687F;
-	@include border-radius(10px);
-	/*@include single-box-shadow;*/
-	@include box-shadow(#14687F 0px 0px 30px);
-	margin: 19px 0px 3px 0px;
+#animationCanvas{
+	/*display:none;*/
 }
 
 #divCanvas{
@@ -75,7 +71,6 @@ h2 h3{
 }
 
 #divCanvas>div{
-	width:335px;
 	/*background-color: yellow;*/
 	position: relative;
 	left:200px;

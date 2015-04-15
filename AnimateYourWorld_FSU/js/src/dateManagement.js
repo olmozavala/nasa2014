@@ -170,3 +170,28 @@ function addDateRangeText(from,to){
 	list.append("<li>"+from+" -- "+to+"</li>") 
 	
 }
+
+
+var lastUpdateOfUrls = new Date();
+/**
+ * This function is used to save the current 'tiles' that the user is 'viewing' 
+ * @param {type} url
+ * @returns {undefined}
+ */
+function saveCurrentRequests(url){
+	var currentUpdate = new Date();
+	// We assume that requesting the layers takes less than 1 sec. 
+	var threshold = 500; 
+	if( (currentUpdate - lastUpdateOfUrls ) > threshold){
+		lastUpdateOfUrls = currentUpdate;
+		current_requests = new Array();
+		console.log("---------- Clearing prev urls ----------");
+	}
+
+	var currUrl = url.split("&");
+	var currCol = currUrl[currUrl.length - 3].split("=")[1]; 
+	var currRow = currUrl[currUrl.length - 2].split("=")[1]; 
+	console.log("Col: "+currCol+"  Row: "+currRow);
+	var size = current_requests.length;
+	current_requests[size] = url;
+}

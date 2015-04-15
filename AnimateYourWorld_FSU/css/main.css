@@ -58,21 +58,11 @@ h2 h3 {
 }
 
 /* line 54, ../scss/main.scss */
-#myCanvas {
-  background-color: #14687F;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  -ms-border-radius: 10px;
-  -o-border-radius: 10px;
-  border-radius: 10px;
-  /*@include single-box-shadow;*/
-  -webkit-box-shadow: #14687f 0px 0px 30px;
-  -moz-box-shadow: #14687f 0px 0px 30px;
-  box-shadow: #14687f 0px 0px 30px;
-  margin: 19px 0px 3px 0px;
+#animationCanvas {
+  /* display: none; */
 }
 
-/* line 62, ../scss/main.scss */
+/* line 58, ../scss/main.scss */
 #divCanvas {
   position: absolute;
   left: 30%;
@@ -83,28 +73,25 @@ h2 h3 {
   display: none;
 }
 
-/* line 72, ../scss/main.scss */
+/* line 68, ../scss/main.scss */
 #previousFrame, #nextFrame, #playAnimation {
   display: none;
   margin-top: 0px;
 }
 
-/* line 77, ../scss/main.scss */
+/* line 73, ../scss/main.scss */
 #divCanvas > div {
-  width: 335px;
   /*background-color: yellow;*/
   position: relative;
   left: 200px;
 }
 
-/* line 85, ../scss/main.scss */
+/* line 80, ../scss/main.scss */
 #currentDate {
   width: 100px;
   background-color: white;
-  -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
-  -ms-border-radius: 3px;
-  -o-border-radius: 3px;
+  -webkit-border-radius: 3px;
   border-radius: 3px;
   padding: 7px;
   font-size: 15px;

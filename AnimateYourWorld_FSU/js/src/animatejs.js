@@ -1,7 +1,7 @@
 var countImages = 0;
 var totalImages = 0;
 var imagesData = new Array;
-var redTileSize = 128;//TODO
+var imgSizes = 512;//TODO
 var animSize = .50;//Percentage of height
 var cols = new Array;
 var rows = new Array;
@@ -9,6 +9,15 @@ var dates = new Array;
 var urlTemplate = "";
 var currentDate = 0;
 var waitTimeBetweenFrames = 2000;
+
+var offsetX = 0;
+var offsetY = 0;
+var scale = 1;
+
+var tx = 0;
+var ty = 0;
+var mx = 0;
+var my = 0;
 
 var animSpeed = 300;
 var intervalHandler;// This is the handler of the 'interval' function
@@ -26,7 +35,7 @@ function initAnimationButtons(){
 	$("#lastFrame").click(animLastFrame);
 	$("#playAnimation").click(playAnimation);
 	$("#stopAnimation").click(stopAnimation);
-	$("#makeAnimation").click(makeAnimation);
+	$("#makeAnimation").click(startAnimation);
 	$("#clearAnimation").click(clearAnimation);
 }
 
@@ -50,55 +59,72 @@ function canvasFunction(extent, resolution, pixelRatio, size, projection) {
 	extent = [extent[0], -1*extent[3]+180,extent[2], -1*extent[1]+180];
 	var tileRange = currGrid.getTileRangeForExtentAndResolution(extent,resolution);
 	
-	cols = _.range(Math.max(0,tileRange.minX),Math.max(0,tileRange.maxX));
-	rows = _.range(Math.max(0,tileRange.minY),Math.max(0,tileRange.maxY));
+	// Finding the offsets of the canvas
+	var z = currGrid.getZForResolution(resolution);
+	scale = resolution / currGrid.getResolution(z);
 
-	canvas = document.getElementById("myCanvas");
+	var myTileRange = {
+						"minX": (scale * (extent[0] + 180) / (resolution * imgSizes)),
+						"minY": (scale * (extent[1] - 90) /  (resolution * imgSizes)),	
+						"maxX": (scale * (extent[2] + 180) / (resolution * imgSizes)),
+						"maxY": (scale * (extent[3] - 90) /  (resolution * imgSizes))};	
 
-/*
-	canvas.width = size[0];
-	canvas.height = size[1];
+	cols = _.range(Math.max(0,tileRange.minX),Math.max(0,tileRange.maxX+1));
+	rows = _.range(Math.max(0,tileRange.minY),Math.max(0,tileRange.maxY+1));
 
+	offsetX = _.min(cols) - myTileRange.minX;
+	offsetY = _.min(rows) - myTileRange.minY;
+
+	console.log("----------------------");
+	console.log(myTileRange);
+	console.log(tileRange);
+	console.log(scale);
+//	console.log(extent);
+//	console.log(scale);
+//	console.log(resolution);
+	console.log(cols);
+	console.log(rows);
+	console.log("OX: "+offsetX+ "   OY: "+offsetY);
+	
+	canvas = document.getElementById("animationCanvas");
+	ctx = canvas.getContext('2d');
+	
+    var canvasWidth = size[0];
+    var canvasHeight = size[1];        
+	
+	canvas.width = canvasWidth;
+	canvas.height = canvasHeight;   	
+	
 	clearCanvas();
-	*/
-    return canvas;
+	if(anim_status === anim_playing){
+		startAnimation();
+	}
+//    return  document.getElementById("emptyCanvas");
+    return  canvas;
 }
 
 function startAnimation(){
-
-	displayControls(false);
+	
+	displayControls(true);
 	$("#loading").show();
-
+	
 	var layerObj = nasa_layers[currentLayer];
 	urlTemplate = layerObj.wmts+"layer="+layerObj.name+
 			"&style&tilematrixset="+layerObj.matrix+
 			"&tilematrix="+currTileMatrix+
-			"&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&";
+			"&Service=WMTS&Request=GetTile&Version=1.0.0&Format="+layerObj.format+"&";
 	
-	$("#myCanvas").show();
-	canvas = document.getElementById("myCanvas");
-	var ctx = canvas.getContext('2d');
-	
-	canvas.width = redTileSize*cols.length;
-	canvas.height = redTileSize*rows.length;
-	
-	/*
 	console.log("Rows:"+rows);
 	console.log("Cols:"+cols);
-	console.log("Dates:"+dates);
-	*/
 	
 	totalImages = cols.length*rows.length;
 	currentFrame = 0;
-
+	
 	loadAnimationImages();
 	playAnimation();
 }
 
 function loadAnimationImages(){
-	canvas = document.getElementById("myCanvas");
-	ctx = canvas.getContext('2d');
-
 	//Creates the image objects
 	for(var j = 0; j < dates.length; j++){
 		for(var row=0;row<rows.length;row++){
@@ -126,13 +152,15 @@ function loadAnimationImages(){
 				eval("imageNumber"+j+"_"+row+"_"+col+".src = '"+url+"'");
 				eval("imageNumber"+j+"_"+row+"_"+col+".row = "+row);
 				eval("imageNumber"+j+"_"+row+"_"+col+".col = "+col);
+				eval("imageNumber"+j+"_"+row+"_"+col+".width = 512");
+				eval("imageNumber"+j+"_"+row+"_"+col+".heigth = 512");
 				eval("imageNumber"+j+"_"+row+"_"+col+".id = "+col*row*j);
 				eval("imageNumber"+j+"_"+row+"_"+col+".addEventListener('load', onLoadImage);");
 				eval("imageNumber"+j+"_"+row+"_"+col+".addEventListener('error', errorFunction);");
 			}//cols
 		}//rows
 	}
-
+	
 	startAnimationLoop();
 }
 
@@ -142,17 +170,48 @@ function loadAnimationImages(){
  * @returns {undefined}
  */
 function errorFunction(e){
-
+	
 	var currentImage = parseInt(e.target.id);
-//	var errorCount = parseInt(e.target.errorCount);
-
+	//	var errorCount = parseInt(e.target.errorCount);
+	
 	alert("There has been a problem loading image with id: "+ currentImage 
-				+" please stop the animation and reload it");
+			+" please stop the animation and reload it");
 	
 }
 
+function drawImage(img){
+	/*
+	ctx.strokeStyle="black";
+	ctx.rect(
+			img.col*imgSizes + (tx*imgSizes),
+			img.row*imgSizes + (ty*imgSizes),
+			imgSizes,
+			imgSizes);
+	
+	ctx.stroke();
+	*/
+
+	ctx.drawImage(img,(1/scale) * ( (img.col+offsetX) * imgSizes),
+				      (1/scale) * ( (img.row+offsetY) * imgSizes),
+					  (1/scale) * imgSizes,
+					  (1/scale) * imgSizes);
+	                   
+//	ctx.drawImage(img,img.col*imgSizes/2,
+//					  img.row*imgSizes/2,imgSizes/2,imgSizes/2);
+
+//	ctx.drawImage(img,img.col*imgSizes+(offsetX*imgSizes),
+//					  img.row*imgSizes+(offsetY*imgSizes),imgSizes,imgSizes);
+	
+	//	console.log("**************");
+	//	console.log(main_view.getResolution());
+}
+
 function onLoadImage(){
-	ctx.drawImage(this,this.col*redTileSize,this.row*redTileSize,redTileSize,redTileSize);
+//	ctx.strokeStyle="black";
+//	ctx.fillRect( 0, 0, canvas.width, canvas.height);
+//	ctx.rect( 0, 0, canvas.width, canvas.height);
+//	ctx.stroke();
+	drawImage(this);
 	displayControls(true);
 }
 
@@ -167,7 +226,6 @@ function displayControls(display){
 		$("#nextFrame").hide();
 		$("#playAnimation").hide();
 	}
-	
 }
 
 /**
@@ -216,16 +274,17 @@ function loopAnimation(){
 	if(anim_status === anim_playing){
 		currentFrame = currentFrame < (dates.length-1)? ++currentFrame: 0;
 	}
-//	clearCanvas();
+	//	clearCanvas();
 	
 	//Draws all the image that correspond to the current date
 	$("#currentDate").text(dates[currentFrame]);
 	for(var row=0;row<rows.length;row++){
 		for(var col=0;col<cols.length;col++){
-			ctx.drawImage(eval('imageNumber'+currentFrame+"_"+row+"_"+col), 
-				col*redTileSize,row*redTileSize,redTileSize,redTileSize);
+			drawImage(eval('imageNumber'+currentFrame+"_"+row+"_"+col));
 		}
 	}
+	
+	map_main.render();
 }
 /**
  * Moves the animation to the first and last frame 
@@ -279,7 +338,6 @@ function animSlower(){
  */
 function clearCanvas(){
 	//Clears any previous display in the canvas
-	var ctx = canvas.getContext('2d');
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
@@ -294,5 +352,6 @@ function stopAnimation(){
 
 function clearAnimation(){
 	clearLoopHandler();
+	//TODO empty the animaiton canvas
 	$("#divCanvas").hide();
 }

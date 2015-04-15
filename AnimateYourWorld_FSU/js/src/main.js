@@ -16,6 +16,7 @@ goog.require('ol.format.WMSCapabilities');
 var nasa_layers = new Array();
 var ol3_layers = new Array(81);
 var currentLayer = 47; 
+//var currentLayer = 60; 
 var map_main;
 var main_view;
 
